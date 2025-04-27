@@ -1,6 +1,4 @@
-﻿using Core.Domain.Models;
-
-namespace Infrastructure.Classes.Responses;
+﻿namespace Core.Domain.Models;
 
 public class RepoResponse : ResultResponse
 {
