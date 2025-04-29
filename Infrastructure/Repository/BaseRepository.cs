@@ -2,7 +2,7 @@
 using Core.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
-using Core.Domain.Models;
+using Core.Domain.Models.Reponses;
 
 namespace Infrastructure.Repository;
 
@@ -58,7 +58,7 @@ public class BaseRepository<TEntity>(DataContext context) : IBaseRepository<TEnt
             var entities = await _dbSet.ToListAsync();
             return new RepoResponse<IEnumerable<TEntity>> { Success = true, StatusCode = 200, Content = entities };
         }
-        catch (Exception ex) { return new RepoResponse<IEnumerable<TEntity>> { Success = false, Message = $"{ex.Message}", StatusCode = 500 }; }
+        catch (Exception ex) { return new RepoResponse<IEnumerable<TEntity>> { Success = false, Message = $"{ex.Message}", StatusCode = 500, Content = [] }; }
     }
 
     public virtual async Task<RepoResponse> UpdateAsync(TEntity entity)
