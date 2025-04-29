@@ -16,11 +16,11 @@ public class FormFactory
         return addRulesForm;
     }
 
-    public static AddRulesForm Create(UpdateRulesRequest updateRulesRequest)
+    public static UpdateRulesForm Create(UpdateRulesRequest updateRulesRequest)
     {
         if (updateRulesRequest == null) return null!;
 
-        var updateRulesForm = new AddRulesForm()
+        var updateRulesForm = new UpdateRulesForm()
         {
             EventId = updateRulesRequest.EventId,
             RuleItems = updateRulesRequest.RuleItems

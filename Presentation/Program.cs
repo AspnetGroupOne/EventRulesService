@@ -1,4 +1,7 @@
+using Core.Interfaces;
+using Core.Internal.Services;
 using Infrastructure.Context;
+using Infrastructure.Repository;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,12 +12,13 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<DataContext>(x => x.UseSqlServer(builder.Configuration.GetConnectionString("AspDB")));
 
+builder.Services.AddScoped<IForbiddenItemRepository, ForbiddenItemRepository>();
+builder.Services.AddScoped<IForbiddenItemService, ForbiddenItemService>();
 
 var app = builder.Build();
 app.MapOpenApi();
 app.UseSwagger();
 app.UseSwaggerUI();
-
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();

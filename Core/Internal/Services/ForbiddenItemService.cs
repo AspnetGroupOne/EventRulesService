@@ -3,7 +3,6 @@ using Core.Domain.Models.Reponses;
 using Core.Factories;
 using Core.Interfaces;
 using Infrastructure.Repository;
-using System.Reflection.Metadata;
 
 namespace Core.Internal.Services;
 

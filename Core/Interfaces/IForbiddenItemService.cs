@@ -5,12 +5,12 @@ namespace Core.Interfaces
 {
     public interface IForbiddenItemService
     {
-        Task<ItemResponse> AddAForbiddenItem(AddRulesForm rulesForm);
+        Task<ItemResponse> AddAForbiddenItem(AddRulesForm addRulesForm);
 
         //Dont know if i will need this..
         //Task<ItemResponse> GetAForbiddenItem(string id);
         Task<ItemResponse> GetAllForbiddenItemsById(string id);
         Task<ItemResponse> RemoveForbiddenItems(string id);
-        Task<ItemResponse> UpdateForbiddenItems();
+        Task<ItemResponse> UpdateForbiddenItems(UpdateRulesForm updateRulesForm);
     }
 }
