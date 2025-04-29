@@ -2,6 +2,6 @@
 
 public class UpdateRulesForm
 {
-    public Guid Id { get; set; }
-    public List<string> Rules { get; set; } = null!;
+    public string EventId { get; set; } = null!;
+    public List<string> RuleItems { get; set; } = null!;
 }

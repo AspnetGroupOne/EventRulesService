@@ -1,8 +1,7 @@
 ﻿using Core.Domain.Models;
-using Core.Factories;
 using Core.Interfaces;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Presentation.Factory;
 
 namespace Presentation.Controllers
 {
@@ -15,36 +14,37 @@ namespace Presentation.Controllers
         [HttpPost]
         public async Task<IActionResult> AddRules(AddRulesRequest addRulesRequest)
         {
-            var addRule = RuleFactory.Create(addRulesRequest);
+            if (!ModelState.IsValid) { return BadRequest(); }
 
+            var addRulesForm = FormFactory.Create(addRulesRequest);
+            var result = await _forbiddenItemService.AddAForbiddenItem(addRulesForm);
 
-            //Do a state check. 
-            //Could split it here and send it seperately to the services?
-            //If doing that then i need to send the entity first to get the id.
-            // and then send the list and the id on to the item service.
-
+            return result.Success ? Ok(result) : BadRequest();
         }
 
         [HttpPut]
         public async Task<IActionResult> UpdateRules(UpdateRulesRequest updateRulesRequest)
         {
-            //statecheck
-            //need to get the entity with the guid id and add the id to the form and send it on.
-            // turn request into update. If rule not in the new list then remove.
+            if (!ModelState.IsValid) { return BadRequest(); }
+
+            var updateRulesForm = FormFactory.Create(updateRulesRequest);
+            var result = await _forbiddenItemService.UpdateForbiddenItems(updateRulesForm);
+
+            return result.Success ? Ok(result) : BadRequest();
         }
 
         [HttpGet("/id")]
         public async Task<IActionResult> GetAllRules(string id)
         {
-            //find which entity and then get all of the other entities with the same id
-
-
+            var result = await _forbiddenItemService.GetAllForbiddenItemsById(id);
+            return result.Success ? Ok(result) : BadRequest();
         }
 
         [HttpDelete("/id")]
-        public async Task<IActionResult> RemoveRules()
+        public async Task<IActionResult> RemoveRules(string id)
         {
-            //Find the entity and which id. Remove it all.
+            var result = await _forbiddenItemService.RemoveForbiddenItems(id);
+            return result.Success ? Ok(result) : BadRequest();
         }
     }
 }
