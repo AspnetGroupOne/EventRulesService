@@ -15,7 +15,7 @@ public class ForbiddenItemRepository(DataContext context) : BaseRepository<Forbi
 
             var entities = await _dbSet.Where(item => item.EventId == id ).ToListAsync();
 
-            return new RepoResponse<IEnumerable<ForbiddenEntity>> { Success = false, StatusCode = 200, Content = entities };
+            return new RepoResponse<IEnumerable<ForbiddenEntity>> { Success = true, StatusCode = 200, Content = entities };
         }
         catch (Exception ex) { return new RepoResponse<IEnumerable<ForbiddenEntity>> { Success = false, StatusCode = 500, Message = $"{ex.Message}", Content = [] }; }
     }
@@ -35,7 +35,7 @@ public class ForbiddenItemRepository(DataContext context) : BaseRepository<Forbi
                 _dbSet.Remove(entity);
             }
             await _context.SaveChangesAsync();
-            return new RepoResponse() { Success = false, StatusCode = 200 };
+            return new RepoResponse() { Success = true, StatusCode = 200 };
         }
         catch (Exception ex) { return new RepoResponse() { Success = false, StatusCode = 500, Message = $"{ex.Message}" }; }
     }
