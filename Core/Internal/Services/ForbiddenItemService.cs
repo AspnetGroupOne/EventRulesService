@@ -55,7 +55,15 @@ public class ForbiddenItemService(IForbiddenItemRepository forbiddenItemReposito
     {
         try
         {
-            //Create a check if the entity with the item is in the db or not. If in updateform and not in DB then add and remove if reverse.
+            //Take in list with id.
+            //Get a list of the current entities.
+            //Compare the two lists. If an entity is not in the new list => Remove.
+            //If a new list items is not among the entities => Add.
+
+
+
+
+
 
 
 
