@@ -14,10 +14,10 @@ public class ForbiddenItemService(IForbiddenItemRepository forbiddenItemReposito
     {
         try
         {
-            if (rulesForm == null) { return new ItemResponse() { Success = false, StatusCode = 500, Message = "The form is null." }; }
+            if (rulesForm == null) { return new ItemResponse() { Success = false, StatusCode = 400, Message = "The form is null." }; }
 
             var entities = rulesForm.RuleItems.Select(rule => RuleFactory.Create(rulesForm.EventId, rule)).ToList();
-            if (entities == null) { return new ItemResponse() { Success = false, StatusCode = 500, Message = "Entities is null." }; }
+            if (entities == null) { return new ItemResponse() { Success = false, StatusCode = 404, Message = "Entities is null." }; }
 
             foreach ( var entity in entities ) { await _forbiddenItemRepository.CreateAsync(entity); }
             
@@ -43,7 +43,7 @@ public class ForbiddenItemService(IForbiddenItemRepository forbiddenItemReposito
         {
             var result = await _forbiddenItemRepository.GetAllItemsAsync(id);
 
-            if (result.Content == null) { return new ItemResponse() { Success = false, StatusCode = 500, Message = "Entities is null." }; }
+            if (result.Content == null) { return new ItemResponse() { Success = false, StatusCode = 400, Message = "Entities is null." }; }
 
             var entities = result.Content.Select(RuleFactory.Create).ToList();
             return new ItemResponse<IEnumerable<ForbiddenItem>> { Success = true, StatusCode = 200, Content = entities };
@@ -76,10 +76,10 @@ public class ForbiddenItemService(IForbiddenItemRepository forbiddenItemReposito
     {
         try
         {
-            if (id == null) { return new ItemResponse() { Success = false, StatusCode = 500, Message = "Id is null." }; }
+            if (id == null) { return new ItemResponse() { Success = false, StatusCode = 400, Message = "Id is null." }; }
 
             var result = await _forbiddenItemRepository.RemoveAllById(id);
-            if (!result.Success) { return new ItemResponse() { Success = false, StatusCode = 500, Message = "Something went wrong when removing entities." }; }
+            if (!result.Success) { return new ItemResponse() { Success = false, StatusCode = 400, Message = "Something went wrong when removing entities." }; }
 
             return new ItemResponse { Success = true, StatusCode = 200 };
         }

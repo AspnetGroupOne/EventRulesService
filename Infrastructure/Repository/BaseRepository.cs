@@ -3,6 +3,7 @@ using Core.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using Core.Domain.Models.Reponses;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Infrastructure.Repository;
 
@@ -56,6 +57,8 @@ public class BaseRepository<TEntity>(DataContext context) : IBaseRepository<TEnt
         try
         {
             var entities = await _dbSet.ToListAsync();
+            if (entities.IsNullOrEmpty()) { return new RepoResponse<IEnumerable<TEntity>> { Success = false, StatusCode = 404, Message = "Entities not found.", Content = [] }; }
+
             return new RepoResponse<IEnumerable<TEntity>> { Success = true, StatusCode = 200, Content = entities };
         }
         catch (Exception ex) { return new RepoResponse<IEnumerable<TEntity>> { Success = false, Message = $"{ex.Message}", StatusCode = 500, Content = [] }; }
