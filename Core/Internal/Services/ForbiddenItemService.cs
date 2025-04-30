@@ -43,7 +43,7 @@ public class ForbiddenItemService(IForbiddenItemRepository forbiddenItemReposito
         {
             var result = await _forbiddenItemRepository.GetAllItemsAsync(id);
 
-            if (result.Content == null) { return new ItemResponse() { Success = false, StatusCode = 400, Message = "Entities is null." }; }
+            if (result.Content == null) { return new ItemResponse() { Success = result.Success, StatusCode = result.StatusCode, Message = result.Message }; }
 
             var entities = result.Content.Select(RuleFactory.Create).ToList();
             return new ItemResponse<IEnumerable<ForbiddenItem>> { Success = true, StatusCode = 200, Content = entities };
@@ -79,7 +79,7 @@ public class ForbiddenItemService(IForbiddenItemRepository forbiddenItemReposito
             if (id == null) { return new ItemResponse() { Success = false, StatusCode = 400, Message = "Id is null." }; }
 
             var result = await _forbiddenItemRepository.RemoveAllById(id);
-            if (!result.Success) { return new ItemResponse() { Success = false, StatusCode = 400, Message = "Something went wrong when removing entities." }; }
+            if (!result.Success) { return new ItemResponse() { Success = result.Success, StatusCode = result.StatusCode, Message = result.Message }; }
 
             return new ItemResponse { Success = true, StatusCode = 200 };
         }
