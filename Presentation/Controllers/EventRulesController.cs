@@ -34,14 +34,14 @@ namespace Presentation.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetRulesForId(string id)
+        public async Task<IActionResult> GetRulesForId([FromRoute(Name = "id")] string id)
         {
             var result = await _forbiddenItemService.GetAllForbiddenItemsById(id);
             return result.Success ? Ok(result) : BadRequest(result);
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> Delete([FromRoute(Name = "id")] string id)
         {
             var result = await _forbiddenItemService.RemoveForbiddenItems(id);
             return result.Success ? Ok(result) : BadRequest(result);
