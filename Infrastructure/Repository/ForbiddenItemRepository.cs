@@ -11,7 +11,7 @@ public class ForbiddenItemRepository(DataContext context) : BaseRepository<Forbi
     {
         try
         {
-            if (id == null) { return new RepoResponse<IEnumerable<ForbiddenEntity>> { Success = false, StatusCode = 500, Message = "The id is null", Content = [] }; }
+            if (id == null) { return new RepoResponse<IEnumerable<ForbiddenEntity>> { Success = false, StatusCode = 400, Message = "The id is null", Content = [] }; }
 
             var entities = await _dbSet.Where(item => item.EventId == id ).ToListAsync();
 
@@ -25,7 +25,7 @@ public class ForbiddenItemRepository(DataContext context) : BaseRepository<Forbi
     {
         try
         {
-            if (id == null) { return new RepoResponse<IEnumerable<ForbiddenEntity>> { Success = false, StatusCode = 500, Message = "The id is null", Content = [] }; }
+            if (id == null) { return new RepoResponse() { Success = false, StatusCode = 400, Message = "The id is null" }; }
 
             var entities = await _dbSet.Where(item => item.EventId == id).ToListAsync();
             if (entities.Count == 0) { return new RepoResponse() { Success = false, StatusCode = 404, Message = "No entities found." }; }
