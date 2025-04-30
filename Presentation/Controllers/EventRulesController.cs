@@ -33,14 +33,14 @@ namespace Presentation.Controllers
             return result.Success ? Ok(result) : BadRequest(result);
         }
 
-        [HttpGet("/{id}")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetRulesForId(string id)
         {
             var result = await _forbiddenItemService.GetAllForbiddenItemsById(id);
             return result.Success ? Ok(result) : BadRequest(result);
         }
 
-        [HttpDelete("/{id}")]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(string id)
         {
             var result = await _forbiddenItemService.RemoveForbiddenItems(id);
