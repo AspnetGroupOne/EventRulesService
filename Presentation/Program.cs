@@ -19,9 +19,10 @@ var app = builder.Build();
 
 app.MapOpenApi();
 app.UseHttpsRedirection();
-app.UseAuthorization();
-app.MapControllers();
 
 app.UseCors(x => x.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+
+app.UseAuthorization();
+app.MapControllers();
 
 app.Run();
