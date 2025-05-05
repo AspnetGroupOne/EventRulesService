@@ -10,18 +10,23 @@ Is made by sending a request with no id at the end.
 
 www.url.net/api/EventRules/
 
-The api needs data that looks like this: (All fields it takes in are handled like strings.)
+The api needs data that looks like this: (All fields except eventId it takes in are handled like bools.)
 
 ```json
 {
-    "eventId": "56f58514-7581-4b18-97f5-b6eb5ba7b9c5",
-    "gateOpenStart": "1030",
-    "gateOpenEnd": "1200",
-    "preShowStart": "1300",
-    "preShowEnd": "1400",
-    "ceremonyStart": "1500",
-    "ceremonyEnd": "1530",
-    "concertStart": "1600"
+    "eventId": "270e876e-1d6f-496e-bb7c-05fc71d38475",
+    "alcohol": true,
+    "bike": false,
+    "camera": true,
+    "hazard": false,
+    "knife": false,
+    "merch": false,
+    "noise": false,
+    "pets": true,
+    "picnic": false,
+    "pill": false,
+    "tent": false,
+    "umbrella": false
 }
 ```
 
@@ -38,14 +43,19 @@ And you will recieve data in json format that looks like this on success:
 ```json
 {
     "content": {
-        "eventId": "56f58514-7581-4b18-97f5-b6eb5ba7b9c5",
-        "gateOpenStart": "1130",
-        "gateOpenEnd": "1200",
-        "preShowStart": "1300",
-        "preShowEnd": "1400",
-        "ceremonyStart": "1500",
-        "ceremonyEnd": "1530",
-        "concertStart": "1600"
+        "eventId": "270e876e-1d6f-496e-bb7c-05fc71d38475",
+        "alcohol": false,
+        "bike": false,
+        "camera": false,
+        "hazard": false,
+        "knife": false,
+        "merch": false,
+        "noise": false,
+        "pets": false,
+        "picnic": false,
+        "pill": false,
+        "tent": false,
+        "umbrella": false
     },
     "success": true,
     "statusCode": 200,
