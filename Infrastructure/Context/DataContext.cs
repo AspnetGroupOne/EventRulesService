@@ -5,5 +5,5 @@ namespace Infrastructure.Context;
 
 public class DataContext(DbContextOptions<DataContext> options) : DbContext(options)
 {
-    public virtual DbSet<ForbiddenEntity> Rules { get; set; }
+    public virtual DbSet<ForbiddenEntity> ForbiddenItems { get; set; }
 }

@@ -34,16 +34,20 @@ namespace Presentation.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetRulesForId([FromRoute(Name = "id")] string id)
+        public async Task<IActionResult> GetRules(string id)
         {
-            var result = await _forbiddenItemService.GetAllForbiddenItemsById(id);
+            if (id == null) { return BadRequest(); }
+
+            var result = await _forbiddenItemService.GetAForbiddenItem(id);
             return result.Success ? Ok(result) : BadRequest(result);
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete([FromRoute(Name = "id")] string id)
+        public async Task<IActionResult> Delete(string id)
         {
-            var result = await _forbiddenItemService.RemoveForbiddenItems(id);
+            if (id == null) { return BadRequest(); }
+
+            var result = await _forbiddenItemService.RemoveForbiddenItem(id);
             return result.Success ? Ok(result) : BadRequest(result);
         }
     }
