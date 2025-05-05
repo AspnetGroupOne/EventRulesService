@@ -16,37 +16,29 @@ public class ForbiddenItemService(IForbiddenItemRepository forbiddenItemReposito
         {
             if (rulesForm == null) { return new ItemResponse() { Success = false, StatusCode = 400, Message = "The form is null." }; }
 
-            var entities = rulesForm.RuleItems.Select(rule => RuleFactory.Create(rulesForm.EventId, rule)).ToList();
-            if (entities == null) { return new ItemResponse() { Success = false, StatusCode = 404, Message = "Entities is null." }; }
+            var entity = RuleFactory.Create(rulesForm);
+            if (entity == null) { return new ItemResponse() { Success = false, StatusCode = 404, Message = "Entities is null." }; }
 
-            foreach ( var entity in entities ) { await _forbiddenItemRepository.CreateAsync(entity); }
-            
+            var result = await _forbiddenItemRepository.CreateAsync(entity);
+            if (!result.Success) { return new ItemResponse() { Success = false, StatusCode = 400, Message = "Something went wrong when adding the entity." }; }
+
             return new ItemResponse { Success = true, StatusCode = 200 };
         }
         catch (Exception ex) { return new ItemResponse { Success = false, Message = $"{ex.Message}", StatusCode = 500 }; }
     }
 
-    //Dont know if i need this..
 
-    //public async Task<ItemResponse> GetAForbiddenItem(string id)
-    //{
-    //    try
-    //    {
-    //        return new ItemResponse<ForbiddenItem> { Success = true, StatusCode = 200, Content = ruleItem };
-    //    }
-    //    catch (Exception ex) { return new ItemResponse { Success = false, Message = $"{ex.Message}", StatusCode = 500 }; }
-    //}
-
-    public async Task<ItemResponse> GetAllForbiddenItemsById(string id)
+    public async Task<ItemResponse> GetAForbiddenItem(string id)
     {
         try
         {
-            var result = await _forbiddenItemRepository.GetAllItemsAsync(id);
-
+            var result = await _forbiddenItemRepository.GetAsync(entity => entity.EventId == id);
             if (result.Content == null) { return new ItemResponse() { Success = result.Success, StatusCode = result.StatusCode, Message = result.Message }; }
 
-            var entities = result.Content.Select(RuleFactory.Create).ToList();
-            return new ItemResponse<IEnumerable<ForbiddenItem>> { Success = true, StatusCode = 200, Content = entities };
+            var item = RuleFactory.Create(result.Content);
+            if (item == null) { return new ItemResponse() { Success = false, StatusCode = 400, Message = "Could not create the rule." }; }
+
+            return new ItemResponse<ForbiddenItem> { Success = true, StatusCode = 200, Content = item };
         }
         catch (Exception ex) { return new ItemResponse { Success = false, Message = $"{ex.Message}", StatusCode = 500 }; }
     }
@@ -55,31 +47,29 @@ public class ForbiddenItemService(IForbiddenItemRepository forbiddenItemReposito
     {
         try
         {
-            //Take in list with id.
-            //Get a list of the current entities.
-            //Compare the two lists. If an entity is not in the new list => Remove.
-            //If a new list items is not among the entities => Add.
+            if (updateRulesForm == null) { return new ItemResponse() { Success = false, StatusCode = 400, Message = "The form is null." }; }
 
+            var entity = RuleFactory.Create(updateRulesForm);
+            if (entity == null) { return new ItemResponse() { Success = false, StatusCode = 400, Message = "Entity is null." }; }
 
-
-
-
-
-
-
+            var result = await _forbiddenItemRepository.UpdateAsync(entity);
+            if (!result.Success) { return new ItemResponse() { Success = false, StatusCode = 400, Message = "Something went wrong when updating." }; }
 
             return new ItemResponse { Success = true, StatusCode = 200 };
         }
         catch (Exception ex) { return new ItemResponse { Success = false, Message = $"{ex.Message}", StatusCode = 500 }; }
     }
-    public async Task<ItemResponse> RemoveForbiddenItems(string id)
+    public async Task<ItemResponse> RemoveForbiddenItem(string id)
     {
         try
         {
             if (id == null) { return new ItemResponse() { Success = false, StatusCode = 400, Message = "Id is null." }; }
 
-            var result = await _forbiddenItemRepository.RemoveAllById(id);
-            if (!result.Success) { return new ItemResponse() { Success = result.Success, StatusCode = result.StatusCode, Message = result.Message }; }
+            var result = await _forbiddenItemRepository.GetAsync(entity => entity.EventId == id);
+            if (result.Content == null) { return new ItemResponse() { Success = false, StatusCode = 400, Message = "Entity is null." }; }
+
+            var resultRemoval = await _forbiddenItemRepository.RemoveAsync(result.Content);
+            if (!resultRemoval.Success) { return new ItemResponse() { Success = resultRemoval.Success, StatusCode = resultRemoval.StatusCode, Message = resultRemoval.Message }; }
 
             return new ItemResponse { Success = true, StatusCode = 200 };
         }

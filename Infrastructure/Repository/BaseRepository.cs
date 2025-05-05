@@ -39,29 +39,16 @@ public class BaseRepository<TEntity>(DataContext context) : IBaseRepository<TEnt
         catch (Exception ex) { return new RepoResponse { Success = false, Message = $"{ex.Message}", StatusCode = 500 }; }
     }
 
-
     public virtual async Task<RepoResponse<TEntity>> GetAsync(Expression<Func<TEntity, bool>> predicate)
     {
         try
         {
             var entity = await _dbSet.FirstOrDefaultAsync(predicate);
-            if (entity == null) { return new RepoResponse<TEntity> { Success = false, StatusCode = 404, Message = "Entity is null." }; }
+            if (entity == null) { return new RepoResponse<TEntity> { Success = false, StatusCode = 404, Message = "Entity is null.", Content = entity }; }
 
             return new RepoResponse<TEntity> { Success = true, StatusCode = 200, Content = entity };
         }
-        catch (Exception ex) { return new RepoResponse<TEntity> { Success = false, Message = $"{ex.Message}", StatusCode = 500 }; }
-    }
-
-    public virtual async Task<RepoResponse<IEnumerable<TEntity>>> GetAllAsync()
-    {
-        try
-        {
-            var entities = await _dbSet.ToListAsync();
-            if (entities.IsNullOrEmpty()) { return new RepoResponse<IEnumerable<TEntity>> { Success = false, StatusCode = 404, Message = "Entities not found.", Content = [] }; }
-
-            return new RepoResponse<IEnumerable<TEntity>> { Success = true, StatusCode = 200, Content = entities };
-        }
-        catch (Exception ex) { return new RepoResponse<IEnumerable<TEntity>> { Success = false, Message = $"{ex.Message}", StatusCode = 500, Content = [] }; }
+        catch (Exception ex) { return new RepoResponse<TEntity> { Success = false, Message = $"{ex.Message}", StatusCode = 500, Content = null }; }
     }
 
     public virtual async Task<RepoResponse> UpdateAsync(TEntity entity)
