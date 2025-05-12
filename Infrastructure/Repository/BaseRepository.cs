@@ -3,7 +3,6 @@ using Core.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using Core.Domain.Models.Reponses;
-using Microsoft.IdentityModel.Tokens;
 
 namespace Infrastructure.Repository;
 
