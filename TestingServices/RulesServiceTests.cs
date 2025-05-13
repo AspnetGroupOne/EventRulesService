@@ -26,81 +26,14 @@ public class RulesServiceTests
         _context.Database.EnsureCreated();
     }
 
-    public static readonly ForbiddenEntity[] ValidForbiddenEntities = {
-        new ForbiddenEntity
-        {
-            EventId = "1",
-            Alcohol = true,
-            Bike = false,
-            Camera = false,
-            Hazard = false,
-            Knife = false,
-            Merch = false,
-            Noise = false,
-            Pets = false,
-            Picnic = false,
-            Pill = false,
-            Tent = false,
-            Umbrella = false
-        }
-    };
-    public static readonly AddRulesForm[] ValidForbiddenAddForm = {
-        new AddRulesForm
-        {
-            EventId = "1",
-            Alcohol = true,
-            Bike = false,
-            Camera = false,
-            Hazard = false,
-            Knife = false,
-            Merch = false,
-            Noise = false,
-            Pets = false,
-            Picnic = false,
-            Pill = false,
-            Tent = false,
-            Umbrella = false
-        }
-    };
-    public static readonly UpdateRulesForm[] ValidUpdateForbiddenAddForm = {
-        new UpdateRulesForm
-        {
-            EventId = "1",
-            Alcohol = true,
-            Bike = false,
-            Camera = false,
-            Hazard = false,
-            Knife = false,
-            Merch = false,
-            Noise = false,
-            Pets = false,
-            Picnic = false,
-            Pill = false,
-            Tent = false,
-            Umbrella = false
-        }
-    };
-    public static readonly AddRulesForm[] InvalidForbiddenAddForm = {
-        new AddRulesForm
-        {
-            EventId = "1",
-        },
-        new AddRulesForm
-        {
-            EventId = "2",
-            Alcohol = false,
-            Bike = false,
-            Camera = false,
-            Hazard = false,
-        }
-    };
+   
 
     //CREATE
     [Fact]
     public async Task AddScheduleAsync_ShouldReturnTrue_IfValidAddForm()
     {
         //Arrange
-        var entity = ValidForbiddenAddForm[0];
+        var entity = ServTestData.ValidForbiddenAddForm[0];
         await _context.SaveChangesAsync();
 
         //Act
@@ -113,9 +46,9 @@ public class RulesServiceTests
     public async Task AddScheduleAsync_ShouldReturnFalse_IfInvalidAddForm()
     {
         //Arrange
-        _context.ForbiddenItems.AddRange(ValidForbiddenEntities);
+        _context.ForbiddenItems.AddRange(ServTestData.ValidForbiddenEntities);
         await _context.SaveChangesAsync();
-        var entity = InvalidForbiddenAddForm[0];
+        var entity = ServTestData.InvalidForbiddenAddForm[0];
 
         //Act
         var result = await _service.AddAForbiddenItem(entity);
@@ -129,7 +62,7 @@ public class RulesServiceTests
     public async Task GetScheduleAsync_ShouldReturnTrue_IfValidEventId()
     {
         //Arrange
-        await _service.AddAForbiddenItem(ValidForbiddenAddForm[0]);
+        await _service.AddAForbiddenItem(ServTestData.ValidForbiddenAddForm[0]);
         await _context.SaveChangesAsync();
         var validScheduleId = "1";
 
@@ -143,7 +76,7 @@ public class RulesServiceTests
     public async Task GetScheduleAsync_ShouldReturnFalse_IfInvalidEventId()
     {
         //Arrange
-        await _service.AddAForbiddenItem(ValidForbiddenAddForm[0]);
+        await _service.AddAForbiddenItem(ServTestData.ValidForbiddenAddForm[0]);
         await _context.SaveChangesAsync();
         var invalidScheduleId = "6";
 
@@ -158,11 +91,11 @@ public class RulesServiceTests
     public async Task UpdateScheduleAsync_ShouldReturnFalse_IfInvalidUpdateForm()
     {
         //Arrange
-        await _service.AddAForbiddenItem(ValidForbiddenAddForm[0]);
+        await _service.AddAForbiddenItem(ServTestData.ValidForbiddenAddForm[0]);
         await _context.SaveChangesAsync();
 
         //Act
-        var result = await _service.UpdateForbiddenItems(ValidUpdateForbiddenAddForm[0]);
+        var result = await _service.UpdateForbiddenItems(ServTestData.ValidUpdateForbiddenAddForm[0]);
 
         //Assert
         Assert.False(result.Success);
@@ -172,7 +105,7 @@ public class RulesServiceTests
     public async Task DeleteScheduleAsync_ShouldReturnTrue_IfValidEventId()
     {
         //Arrange
-        await _service.AddAForbiddenItem(ValidForbiddenAddForm[0]);
+        await _service.AddAForbiddenItem(ServTestData.ValidForbiddenAddForm[0]);
         await _context.SaveChangesAsync();
         var validId = "1";
 
@@ -186,7 +119,7 @@ public class RulesServiceTests
     public async Task DeleteScheduleAsync_ShouldReturnFalse_IfInvalidEventId()
     {
         //Arrange
-        await _service.AddAForbiddenItem(ValidForbiddenAddForm[0]);
+        await _service.AddAForbiddenItem(ServTestData.ValidForbiddenAddForm[0]);
         await _context.SaveChangesAsync();
         var invalidId = "60";
 

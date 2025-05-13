@@ -21,69 +21,14 @@ public class RulesRepositoryTests
         _context.Database.EnsureCreated();
     }
 
-    public static readonly ForbiddenEntity[] ValidForbiddenEntities = {
-        new ForbiddenEntity
-        {
-            EventId = "1",
-            Alcohol = true,
-            Bike = false,
-            Camera = false,
-            Hazard = false,
-            Knife = false,
-            Merch = false,
-            Noise = false,
-            Pets = false,
-            Picnic = false,
-            Pill = false,
-            Tent = false,
-            Umbrella = false
-        },
-        new ForbiddenEntity
-        {
-            EventId = "2",
-            Alcohol = false,
-            Bike = false,
-            Camera = false,
-            Hazard = false,
-            Knife = false,
-            Merch = false,
-            Noise = false,
-            Pets = false,
-            Picnic = false,
-            Pill = false,
-            Tent = false,
-            Umbrella = false
-        }
-    };
-    public static readonly ForbiddenEntity[] InvalidForbiddenEntities = {
-        new ForbiddenEntity
-        {
-            EventId = "1",
-        },
-        new ForbiddenEntity
-        {
-            EventId = "6767676",
-            Alcohol = false,
-            Bike = false,
-            Camera = false,
-            Hazard = false,
-            Knife = false,
-            Merch = false,
-            Noise = false,
-            Pets = false,
-            Picnic = false,
-            Pill = false,
-            Tent = false,
-            Umbrella = false
-        }
-    };
+    
 
     //CREATE
     [Fact]
     public async Task CreateAsync_ShouldReturnTrue_IfValidEntity()
     {
         //Arrange
-        var entity = ValidForbiddenEntities[0];
+        var entity = RepoTestData.ValidForbiddenEntities[0];
         await _context.SaveChangesAsync();
 
         //Act
@@ -96,9 +41,9 @@ public class RulesRepositoryTests
     public async Task CreateAsync_ShouldReturnFalse_IfInvalidEntity()
     {
         //Arrange
-        _context.ForbiddenItems.AddRange(ValidForbiddenEntities);
+        _context.ForbiddenItems.AddRange(RepoTestData.ValidForbiddenEntities);
         await _context.SaveChangesAsync();
-        var entity = InvalidForbiddenEntities[0];
+        var entity = RepoTestData.InvalidForbiddenEntities[0];
 
         //Act
         var result = await _repository.CreateAsync(entity);
@@ -113,7 +58,7 @@ public class RulesRepositoryTests
     public async Task ExistsAsync_ShouldReturnTrue_IfValidPredicate()
     {
         //Arrange
-        _context.ForbiddenItems.AddRange(ValidForbiddenEntities);
+        _context.ForbiddenItems.AddRange(RepoTestData.ValidForbiddenEntities);
         await _context.SaveChangesAsync();
         var validForbiddenId = "1";
 
@@ -127,7 +72,7 @@ public class RulesRepositoryTests
     public async Task ExistsAsync_ShouldReturnFalse_IfInvalidPredicate()
     {
         //Arrange
-        _context.ForbiddenItems.AddRange(ValidForbiddenEntities);
+        _context.ForbiddenItems.AddRange(RepoTestData.ValidForbiddenEntities);
         await _context.SaveChangesAsync();
         var inValidForbiddenId = "";
 
@@ -143,7 +88,7 @@ public class RulesRepositoryTests
     public async Task GetAsync_ShouldReturnTrue_IfValidPredicate()
     {
         //Arrange
-        _context.ForbiddenItems.AddRange(ValidForbiddenEntities);
+        _context.ForbiddenItems.AddRange(RepoTestData.ValidForbiddenEntities);
         await _context.SaveChangesAsync();
         var validForbiddenId = "1";
 
@@ -157,7 +102,7 @@ public class RulesRepositoryTests
     public async Task GetAsync_ShouldReturnFalse_IfInvalidPredicate()
     {
         //Arrange
-        _context.ForbiddenItems.AddRange(ValidForbiddenEntities);
+        _context.ForbiddenItems.AddRange(RepoTestData.ValidForbiddenEntities);
         await _context.SaveChangesAsync();
         var validForbiddenId = "8585";
 
@@ -174,7 +119,7 @@ public class RulesRepositoryTests
     public async Task UpdateAsync_ShouldReturnTrue_IfValidEntity()
     {
         //Arrange
-        _context.ForbiddenItems.AddRange(ValidForbiddenEntities);
+        _context.ForbiddenItems.AddRange(RepoTestData.ValidForbiddenEntities);
         await _context.SaveChangesAsync();
         var validForbiddenId = "1";
 
@@ -192,7 +137,7 @@ public class RulesRepositoryTests
     public async Task UpdateAsync_ShouldReturnFalse_IfInvalidEntity()
     {
         //Arrange
-        _context.ForbiddenItems.AddRange(ValidForbiddenEntities);
+        _context.ForbiddenItems.AddRange(RepoTestData.ValidForbiddenEntities);
         await _context.SaveChangesAsync();
         var inValidEntity = new ForbiddenEntity
         {
@@ -213,9 +158,9 @@ public class RulesRepositoryTests
     public async Task DeleteAsync_ShouldReturnTrue_IfValidEntity()
     {
         //Arrange
-        _context.ForbiddenItems.AddRange(ValidForbiddenEntities);
+        _context.ForbiddenItems.AddRange(RepoTestData.ValidForbiddenEntities);
         await _context.SaveChangesAsync();
-        var validEntity = ValidForbiddenEntities[0];
+        var validEntity = RepoTestData.ValidForbiddenEntities[0];
 
         //Act
         var result = await _repository.RemoveAsync(validEntity);
@@ -227,9 +172,9 @@ public class RulesRepositoryTests
     public async Task DeleteAsync_ShouldReturnFalse_IfInvalidEntity()
     {
         //Arrange
-        _context.ForbiddenItems.AddRange(ValidForbiddenEntities);
+        _context.ForbiddenItems.AddRange(RepoTestData.ValidForbiddenEntities);
         await _context.SaveChangesAsync();
-        var invalidEntity = InvalidForbiddenEntities[1];
+        var invalidEntity = RepoTestData.InvalidForbiddenEntities[1];
 
         //Act
         var result = await _repository.RemoveAsync(invalidEntity);
