@@ -1,4 +1,5 @@
 ﻿using Core.Domain.Models;
+using Core.External.Interfaces;
 using Core.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.Factory;
@@ -7,14 +8,18 @@ namespace Presentation.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class EventRulesController(IForbiddenItemService forbiddenItemService) : ControllerBase
+    public class EventRulesController(IForbiddenItemService forbiddenItemService, IEventValidationService eventValidationService) : ControllerBase
     {
         private readonly IForbiddenItemService _forbiddenItemService = forbiddenItemService;
+        private readonly IEventValidationService _eventValidation = eventValidationService;
 
         [HttpPost]
         public async Task<IActionResult> Create(AddRulesRequest addRulesRequest)
         {
             if (!ModelState.IsValid) { return BadRequest(); }
+
+            var validationResult = await _eventValidation.EventExistanceCheck(addRulesRequest.EventId);
+            if (!validationResult.Success) { return BadRequest(); }
 
             var addRulesForm = FormFactory.Create(addRulesRequest);
             var result = await _forbiddenItemService.AddAForbiddenItem(addRulesForm);
@@ -27,6 +32,9 @@ namespace Presentation.Controllers
         {
             if (!ModelState.IsValid) { return BadRequest(); }
 
+            var validationResult = await _eventValidation.EventExistanceCheck(updateRulesRequest.EventId);
+            if (!validationResult.Success) { return BadRequest(); }
+
             var updateRulesForm = FormFactory.Create(updateRulesRequest);
             var result = await _forbiddenItemService.UpdateForbiddenItems(updateRulesForm);
 
@@ -38,6 +46,9 @@ namespace Presentation.Controllers
         {
             if (id == null) { return BadRequest(); }
 
+            var validationResult = await _eventValidation.EventExistanceCheck(id);
+            if (!validationResult.Success) { return BadRequest(); }
+
             var result = await _forbiddenItemService.GetAForbiddenItem(id);
             return result.Success ? Ok(result) : BadRequest(result);
         }
@@ -46,6 +57,9 @@ namespace Presentation.Controllers
         public async Task<IActionResult> Delete(string id)
         {
             if (id == null) { return BadRequest(); }
+
+            var validationResult = await _eventValidation.EventExistanceCheck(id);
+            if (!validationResult.Success) { return BadRequest(); }
 
             var result = await _forbiddenItemService.RemoveForbiddenItem(id);
             return result.Success ? Ok(result) : BadRequest(result);

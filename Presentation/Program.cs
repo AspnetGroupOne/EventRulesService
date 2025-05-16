@@ -1,3 +1,6 @@
+using Core.External.Interfaces;
+using Core.External.Models;
+using Core.External.Services;
 using Core.Interfaces;
 using Core.Internal.Services;
 using Infrastructure.Context;
@@ -8,6 +11,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
+builder.Services.Configure<ExternalApiOptions>(builder.Configuration.GetSection("ExternalApis"));
+builder.Services.AddHttpClient<IEventValidationService, EventValidationService>();
 
 builder.Services.AddDbContext<DataContext>(x => x.UseSqlServer(builder.Configuration.GetConnectionString("AspDB")));
 
