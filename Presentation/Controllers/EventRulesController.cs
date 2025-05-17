@@ -46,8 +46,9 @@ namespace Presentation.Controllers
         {
             if (id == null) { return BadRequest(); }
 
-            var validationResult = await _eventValidation.EventExistanceCheck(id);
-            if (!validationResult.Success) { return BadRequest(); }
+            // Not sure if this is needed on delete and get..?
+            //var validationResult = await _eventValidation.EventExistanceCheck(id);
+            //if (!validationResult.Success) { return BadRequest(); }
 
             var result = await _forbiddenItemService.GetAForbiddenItem(id);
             return result.Success ? Ok(result) : BadRequest(result);
@@ -58,8 +59,8 @@ namespace Presentation.Controllers
         {
             if (id == null) { return BadRequest(); }
 
-            var validationResult = await _eventValidation.EventExistanceCheck(id);
-            if (!validationResult.Success) { return BadRequest(); }
+            //var validationResult = await _eventValidation.EventExistanceCheck(id);
+            //if (!validationResult.Success) { return BadRequest(); }
 
             var result = await _forbiddenItemService.RemoveForbiddenItem(id);
             return result.Success ? Ok(result) : BadRequest(result);
