@@ -28,19 +28,19 @@ public class ForbiddenItemService(IForbiddenItemRepository forbiddenItemReposito
     }
 
 
-    public async Task<ItemResponse> GetAForbiddenItem(string id)
+    public async Task<ItemResponse<ForbiddenItem>> GetAForbiddenItem(string id)
     {
         try
         {
             var result = await _forbiddenItemRepository.GetAsync(entity => entity.EventId == id);
-            if (result.Content == null) { return new ItemResponse() { Success = result.Success, StatusCode = result.StatusCode, Message = result.Message }; }
+            if (result.Content == null) { return new ItemResponse<ForbiddenItem>() { Success = result.Success, StatusCode = result.StatusCode, Message = result.Message, Content = null }; }
 
             var item = RuleFactory.Create(result.Content);
-            if (item == null) { return new ItemResponse() { Success = false, StatusCode = 400, Message = "Could not create the rule." }; }
+            if (item == null) { return new ItemResponse<ForbiddenItem>() { Success = false, StatusCode = 400, Message = "Could not create the rule.", Content = null }; }
 
             return new ItemResponse<ForbiddenItem> { Success = true, StatusCode = 200, Content = item };
         }
-        catch (Exception ex) { return new ItemResponse { Success = false, Message = $"{ex.Message}", StatusCode = 500 }; }
+        catch (Exception ex) { return new ItemResponse<ForbiddenItem> { Success = false, Message = $"{ex.Message}", StatusCode = 500, Content = null }; }
     }
 
     public async Task<ItemResponse> UpdateForbiddenItems(UpdateRulesForm updateRulesForm)

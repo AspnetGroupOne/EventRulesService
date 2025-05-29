@@ -48,7 +48,7 @@ public class EventRulesController(IForbiddenItemService forbiddenItemService, Ev
         if (id == null) { return BadRequest(); }
 
         var result = await _forbiddenItemService.GetAForbiddenItem(id);
-        return result.Success ? Ok(result) : BadRequest(result);
+        return result.Success ? Ok(result.Content) : BadRequest(result.Content);
     }
 
     [HttpDelete("{id}")]
