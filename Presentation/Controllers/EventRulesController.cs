@@ -1,5 +1,6 @@
 ﻿using Core.Domain.Models;
 using Core.External.Interfaces;
+using Core.External.Services;
 using Core.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.Extensions.Attributes;
@@ -10,29 +11,22 @@ namespace Presentation.Controllers;
 [UseApiKey]
 [Route("api/[controller]")]
 [ApiController]
-public class EventRulesController(IForbiddenItemService forbiddenItemService) : ControllerBase
+public class EventRulesController(IForbiddenItemService forbiddenItemService, EventValidationService eventValidationService) : ControllerBase
 {
     private readonly IForbiddenItemService _forbiddenItemService = forbiddenItemService;
-    [Route("api/[controller]")]
-    [ApiController]
-    public class EventRulesController(IForbiddenItemService forbiddenItemService, IEventValidationService eventValidationService) : ControllerBase
-    {
-        private readonly IForbiddenItemService _forbiddenItemService = forbiddenItemService;
-        private readonly IEventValidationService _eventValidation = eventValidationService;
+    private readonly IEventValidationService _eventValidation = eventValidationService;
 
     [HttpPost]
     public async Task<IActionResult> Create(AddRulesRequest addRulesRequest)
     {
         if (!ModelState.IsValid) { return BadRequest(); }
 
+        // Only need to validate when adding data the first time.
+        var validationResult = await _eventValidation.EventExistanceCheck(addRulesRequest.EventId);
+        if (!validationResult.Success) { return BadRequest(); }
+
         var addRulesForm = FormFactory.Create(addRulesRequest);
         var result = await _forbiddenItemService.AddAForbiddenItem(addRulesForm);
-            // Only need to validate when adding data the first time.
-            var validationResult = await _eventValidation.EventExistanceCheck(addRulesRequest.EventId);
-            if (!validationResult.Success) { return BadRequest(); }
-
-            var addRulesForm = FormFactory.Create(addRulesRequest);
-            var result = await _forbiddenItemService.AddAForbiddenItem(addRulesForm);
 
         return result.Success ? Ok(result) : BadRequest(result);
     }

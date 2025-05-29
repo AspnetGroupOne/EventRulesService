@@ -8,7 +8,8 @@ namespace Core.External.Services;
 public class EventValidationService : IEventValidationService
 {
     // Service made together with chatgpt to fit my use.
-    // Will make a get request to the starting event-api and check all of them if the eventId exists seeing as there is no get by id controller.
+    // Will make a get request to the starting event-api, made by another person, and check all of them if
+    // the eventId exists seeing as there is no get by id controller.
     private readonly HttpClient _httpClient;
     private readonly string _eventCheckingApiUrl;
 
