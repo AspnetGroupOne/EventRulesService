@@ -1,54 +1,55 @@
 ﻿using Core.Domain.Models;
 using Core.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Presentation.Extensions.Attributes;
 using Presentation.Factory;
 
-namespace Presentation.Controllers
+namespace Presentation.Controllers;
+
+[UseApiKey]
+[Route("api/[controller]")]
+[ApiController]
+public class EventRulesController(IForbiddenItemService forbiddenItemService) : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class EventRulesController(IForbiddenItemService forbiddenItemService) : ControllerBase
+    private readonly IForbiddenItemService _forbiddenItemService = forbiddenItemService;
+
+    [HttpPost]
+    public async Task<IActionResult> Create(AddRulesRequest addRulesRequest)
     {
-        private readonly IForbiddenItemService _forbiddenItemService = forbiddenItemService;
+        if (!ModelState.IsValid) { return BadRequest(); }
 
-        [HttpPost]
-        public async Task<IActionResult> Create(AddRulesRequest addRulesRequest)
-        {
-            if (!ModelState.IsValid) { return BadRequest(); }
+        var addRulesForm = FormFactory.Create(addRulesRequest);
+        var result = await _forbiddenItemService.AddAForbiddenItem(addRulesForm);
 
-            var addRulesForm = FormFactory.Create(addRulesRequest);
-            var result = await _forbiddenItemService.AddAForbiddenItem(addRulesForm);
+        return result.Success ? Ok(result) : BadRequest(result);
+    }
 
-            return result.Success ? Ok(result) : BadRequest(result);
-        }
+    [HttpPut]
+    public async Task<IActionResult> Update(UpdateRulesRequest updateRulesRequest)
+    {
+        if (!ModelState.IsValid) { return BadRequest(); }
 
-        [HttpPut]
-        public async Task<IActionResult> Update(UpdateRulesRequest updateRulesRequest)
-        {
-            if (!ModelState.IsValid) { return BadRequest(); }
+        var updateRulesForm = FormFactory.Create(updateRulesRequest);
+        var result = await _forbiddenItemService.UpdateForbiddenItems(updateRulesForm);
 
-            var updateRulesForm = FormFactory.Create(updateRulesRequest);
-            var result = await _forbiddenItemService.UpdateForbiddenItems(updateRulesForm);
+        return result.Success ? Ok(result) : BadRequest(result);
+    }
 
-            return result.Success ? Ok(result) : BadRequest(result);
-        }
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetRules(string id)
+    {
+        if (id == null) { return BadRequest(); }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetRules(string id)
-        {
-            if (id == null) { return BadRequest(); }
+        var result = await _forbiddenItemService.GetAForbiddenItem(id);
+        return result.Success ? Ok(result) : BadRequest(result);
+    }
 
-            var result = await _forbiddenItemService.GetAForbiddenItem(id);
-            return result.Success ? Ok(result) : BadRequest(result);
-        }
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(string id)
+    {
+        if (id == null) { return BadRequest(); }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(string id)
-        {
-            if (id == null) { return BadRequest(); }
-
-            var result = await _forbiddenItemService.RemoveForbiddenItem(id);
-            return result.Success ? Ok(result) : BadRequest(result);
-        }
+        var result = await _forbiddenItemService.RemoveForbiddenItem(id);
+        return result.Success ? Ok(result) : BadRequest(result);
     }
 }
