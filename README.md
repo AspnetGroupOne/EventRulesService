@@ -1,7 +1,5 @@
 # EventRulesService
 
-Made by https://github.com/SimonR-prog
-
 # Postman:
 
 ## Authentication:
@@ -93,4 +91,22 @@ Upon success you will recieve:
 }
 ```
 
+# Sequence diagram plantuml
+
+<img src="https://github.com/user-attachments/assets/7c01a89d-8c6b-4dd6-959d-7eae2c6d8727" width="400">
+
 # Usage in the frontend:
+
+## Adding rules to the event:
+
+Adding rules is done in a modal where the admin can simply click whichever rules they want to add or remove.
+
+<img src="https://github.com/user-attachments/assets/a83543de-3ad1-49ad-b8c1-1da091d850d8" width="400">
+
+## Showing the rules of an event:
+
+<img src="https://github.com/user-attachments/assets/5c1a6d6f-63b5-4298-8fcf-1f114425190c" width="400">
+
+### Created By:
+
+https://github.com/SimonR-prog
