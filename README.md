@@ -6,16 +6,16 @@ Made by https://github.com/SimonR-prog
 
 ## Authentication:
 
-All requests to this API require an API-Key to be passed in the header.
+All requests to this API require an API-Key to be passed in the header under "X-API-KEY". 
 
-Invalid requests will be met with_
+Invalid requests will be met with:
+
 ```json
 {
     "success": false,
     "error": "Invalid api-key or api-key is missing."
 }
 ```
-
 
 
 ## POST and PUT: 
