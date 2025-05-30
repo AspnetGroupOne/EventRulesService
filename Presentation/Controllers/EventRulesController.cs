@@ -11,7 +11,7 @@ namespace Presentation.Controllers;
 [UseApiKey]
 [Route("api/[controller]")]
 [ApiController]
-public class EventRulesController(IForbiddenItemService forbiddenItemService, EventValidationService eventValidationService) : ControllerBase
+public class EventRulesController(IForbiddenItemService forbiddenItemService, IEventValidationService eventValidationService) : ControllerBase
 {
     private readonly IForbiddenItemService _forbiddenItemService = forbiddenItemService;
     private readonly IEventValidationService _eventValidation = eventValidationService;
